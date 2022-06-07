@@ -60,7 +60,10 @@ def merge_with_dataset(file_type, file_path):
             merge_data = pd.read_csv(file_path)
         elif file_type == "2":
             merge_data = pd.read_excel(file_path)
+        ship_lst = []
         alert_search = ship_search(merge_data,2,'ship_name','flag','iran')
+        for row in alert_search:
+          ship_lst.append(row)
         result = pd.concat([DATA_INITIALIZATION, merge_data], join="outer")
         result.to_csv(SOURCE, index=False)
         print("Merged successfully!")
