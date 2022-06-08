@@ -9,14 +9,9 @@ DATA_INITIALIZATION['ship_num'] = DATA_INITIALIZATION['ship_num'].apply(str)
 DATASET = {}
 
 
-def alerting(arg1, condition1, condition2, condition3=None):
-    if arg1 == 1:
-        hostile_ship = condition1 and condition2
+def alerting(condition):
+        hostile_ship = condition
         return hostile_ship
-    if arg1 == 2:
-        hostile_ship = condition1 and condition2 and condition3
-        return hostile_ship
-
 
 def ship_search(source, arg1, arg2, arg3, arg4=None, arg5=None, arg6=None):
     try:
@@ -68,7 +63,7 @@ def merge_with_dataset(file_type, file_path):
         for name, flag in zip(alert_search_name, alert_search_flag):
             iran_ship_dict[name] = flag.lower()
             last_ship_name = list(iran_ship_dict.keys())[-1]
-            if alerting(1, len(last_ship_name) > 6, last_ship_name.lower()[-1] == "x"):
+            if alerting(len(last_ship_name) > 6 and last_ship_name.lower()[-1] == "x"):
                 ship_alert = input(f"Critical Alert!,{last_ship_name} is considered hostile, Continue? [Y/N] \n")
                 if ship_alert.lower() == "y":
                     pass
@@ -114,7 +109,7 @@ def ship_monitor():
         ship_flag = input("Please insert ship flag: \n")
         ship_date = input("Please insert date: \n")
         ship_cargo = input("Please insert ship cargo: \n")
-        if alerting(2, len(ship_name) > 6, ship_name.lower()[-1] == "x", ship_flag.lower() == "iran"):
+        if alerting(len(ship_name) > 6 and ship_name.lower()[-1] == "x" and ship_flag.lower() == "iran"):
             ship_alert = input(f"Critical Alert!,{ship_name} is considered hostile, Continue? [Y/N] \n")
             if ship_alert.lower() == "y":
                 pass
