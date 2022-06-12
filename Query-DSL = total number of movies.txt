@@ -1,0 +1,12 @@
+GET netflix_shows/_search?size=0
+{"track_total_hits": false, 
+ "aggs": {
+        "name" : {
+            "filter" : { 
+              "term": { 
+                "director.keyword": "director_name"}},
+            "aggs" : {
+                "num_of_movies" : { 
+                  "value_count": { 
+                    "field" : "director.keyword"} }
+            }}}}
