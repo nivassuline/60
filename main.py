@@ -153,7 +153,7 @@ def doc_generator(df): #Create index, Iter and push rows into index
     df_iter = df.iterrows()
     for index, document in df_iter:
         yield {
-                "_index": "netflix_shows_test",
+                "_index": "netflix_shows",
                 "_source": document.to_dict(),
             }
 
