@@ -144,10 +144,11 @@ def safe_date(date_value): #change all dates formats so elastic can accept them
             else  datetime(1970,1,1,0,0)
     )
 
-# df_new = non_unique_to_df(countrys)
 NETFLIX_DF['avg show time per director'] = pd.Series(get_avg(NETFLIX_DF, get_directors(NETFLIX_DF)))
 NETFLIX_DF = NETFLIX_DF.replace(np.NaN, "Empty", regex=True) #Replace all Nan with other so elastic can accept them
 NETFLIX_DF['date_added'] = NETFLIX_DF['date_added'].apply(safe_date)
+NEW_DF = non_unique_to_df(countrys) #Dataframe that represents the non-unique total number of categories per country
+
 
 def doc_generator(df): #Create index, Iter and push rows into index
     df_iter = df.iterrows()
