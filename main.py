@@ -9,7 +9,7 @@ import re
 
 warnings.simplefilter(action='ignore')
 ES_USER = "elastic"
-ES_PASSWORD = "rYPMyZFtwSyTIYn7gu4R"
+ES_PASSWORD = "pass"
 ES_CLIENT = Elasticsearch("https://localhost:9200", verify_certs=False, basic_auth=(ES_USER, ES_PASSWORD))
 SOURCE = 'netflix_titles.csv'
 NETFLIX_DF = pd.read_csv(SOURCE)
