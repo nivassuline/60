@@ -9,16 +9,16 @@ import re
 
 warnings.simplefilter(action='ignore')
 ES_USER = "elastic"
-ES_PASSWORD = "pass"
+ES_PASSWORD = "_sl=49UCWmU1TJmkhZf1"
 ES_CLIENT = Elasticsearch("https://localhost:9200", verify_certs=False, basic_auth=(ES_USER, ES_PASSWORD))
 SOURCE = 'netflix_titles.csv'
-NETFLIX_DF = pd.read_csv(SOURCE)
+NETFLIX_DF = pd.read_csv(SOURCE)  # 2. read the csv into pandas dataframe (using python)
 TODAY_DATE = date.today()
 DATE_FORMAT = TODAY_DATE.strftime("%m/%d/%Y")
 SEASON = 18000
 
 
-def get_num_of_categories(df):
+def get_num_of_categories(df):  # - total number of catagories (listed_in column)
     num_of_categories_lst = []
     for row in range(len(df)):
         get_catgories = df['listed_in'].iloc[row]
@@ -26,14 +26,14 @@ def get_num_of_categories(df):
     return num_of_categories_lst
 
 
-def get_date(df):
+def get_date(df):  # - current date
     date_lst = []
     for row in range(len(df)):
         date_lst.append(DATE_FORMAT)
     return date_lst
 
 
-def get_duration_in_seconds(df):
+def get_duration_in_seconds(df):  # - duration in seconds (season=300min)
     duration_seconds_lst = []
     for row in range(len(df)):
         duration = str(NETFLIX_DF['duration'].iloc[row])
@@ -50,6 +50,14 @@ def get_duration_in_seconds(df):
     return duration_seconds_lst
 
 
+# 4.add columns to the df
+NETFLIX_DF = NETFLIX_DF.loc[
+    (NETFLIX_DF['date_added'] >= '2016-01-01')]  # 3. Filter all the shows that added before 2016 (date_added column)
+NETFLIX_DF.insert(11, 'total number of categories', get_num_of_categories(NETFLIX_DF))
+NETFLIX_DF['current date'] = get_date(NETFLIX_DF)
+NETFLIX_DF.insert(10, 'duration in seconds', get_duration_in_seconds(NETFLIX_DF))
+
+
 def get_directors(df):
     director_lst = []
     for row in range(len(df)):
@@ -60,13 +68,8 @@ def get_directors(df):
             director_lst.append(director)
     return director_lst
 
-NETFLIX_DF = NETFLIX_DF.loc[(NETFLIX_DF['date_added'] >= '2016-01-01')]  # filter all shows added before 2016
-NETFLIX_DF.insert(11, 'total number of categories', get_num_of_categories(NETFLIX_DF))
-NETFLIX_DF['current date'] = get_date(NETFLIX_DF)
-NETFLIX_DF.insert(10, 'duration in seconds', get_duration_in_seconds(NETFLIX_DF))
 
-
-def get_avg(df, director_lst):
+def get_avg(df, director_lst):  # 5. Add avg show time per director (using duration_in_seconds column)
     name_and_avg_sec = []
     for row in range(len(df)):
         try:
@@ -138,24 +141,27 @@ def non_unique_to_df(lst):
     new_df = pd.DataFrame(data=non_unique_dict)
     return new_df
 
-def safe_date(date_value): #change all dates formats so elastic can accept them
+
+def safe_date(date_value):  # change all dates formats so elastic can accept them
     return (
         pd.to_datetime(date_value) if ~ pd.isna(date_value)
-            else  datetime(1970,1,1,0,0)
+        else datetime(1970, 1, 1, 0, 0)
     )
 
+
 NETFLIX_DF['avg show time per director'] = pd.Series(get_avg(NETFLIX_DF, get_directors(NETFLIX_DF)))
-NETFLIX_DF = NETFLIX_DF.replace(np.NaN, "Empty", regex=True) #Replace all Nan with other so elastic can accept them
+NETFLIX_DF = NETFLIX_DF.replace(np.NaN, "Empty", regex=True)  # Replace all Nan with other so elastic can accept them
 NETFLIX_DF['date_added'] = NETFLIX_DF['date_added'].apply(safe_date)
-NEW_DF = non_unique_to_df(countrys) #Dataframe that represents the non-unique total number of categories per country
+NEW_DF = non_unique_to_df(countrys)  # Dataframe that represents the non-unique total number of categories per country
 
 
-def doc_generator(df): #Create index, Iter and push rows into index
+def doc_generator(df):  # Create index, Iter and push rows into index
     df_iter = df.iterrows()
     for index, document in df_iter:
         yield {
-                "_index": "netflix_shows",
-                "_source": document.to_dict(),
-            }
+            "_index": "netflix_shows",
+            "_source": document.to_dict(),
+        }
 
-helpers.bulk(ES_CLIENT, doc_generator(NETFLIX_DF)) #Push all data into index
+
+helpers.bulk(ES_CLIENT, doc_generator(NETFLIX_DF))  # Push all data into index
