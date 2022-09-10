@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sending-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sending-service
+  template:
+    metadata:
+      labels:
+        app: sending-service
+    spec:
+      containers:
+        - name: sending-service
+          image: nivas1234/sending-service
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80

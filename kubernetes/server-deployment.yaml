@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: psycopg2server-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: psycopg2server-web
+  template:
+    metadata:
+      labels:
+        app: psycopg2server-web
+    spec:
+      containers:
+        - name: psycopg2server-web
+          image: nivas1234/psycopg2server-web
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
