@@ -8,7 +8,7 @@ starttime = time.time()
 
 def get_url_list():
     url_list = []
-    r = requests.get('http://127.0.0.1:80/db_data')  # send request to view all data in database
+    r = requests.get('http://10.0.0.10:80/db_data')  # send request to view all data in database
     for i in r.json():
         url_list.append(i[0])  # add the only the URL's to url_list
     return url_list
@@ -22,12 +22,12 @@ def send_req(url):
     try:
         j = requests.get(url)  # get the status code for URL
         test = requests.get(
-            f'http://127.0.0.1:80/update_status?url={url}&status_code={j.status_code}&last_updated={nowdate}+{current_time}')  # update status code and current time by URL
+            f'http://10.0.0.10:80/update_status?url={url}&status_code={j.status_code}&last_updated={nowdate}+{current_time}')  # update status code and current time by URL
         print(test.json())
     except requests.exceptions.RequestException:
         # if URL returns exception update status code to 404 (not found)
         test = requests.get(
-            f'http://127.0.0.1:80/update_status?url={url}&status_code=404&last_updated={nowdate}+{current_time}')
+            f'http://10.0.0.10:80/update_status?url={url}&status_code=404&last_updated={nowdate}+{current_time}')
         print(test.json())
 
 
