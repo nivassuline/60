@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sending-service
+  name: sending-service2
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sending-service
+      app: sending-service2
   template:
     metadata:
       labels:
-        app: sending-service
+        app: sending-service2
     spec:
       containers:
-        - name: sending-service
-          image: nivas1234/sending-service
+        - name: sending-service2
+          image: nivas1234/sending-service2
           resources:
             limits:
               memory: "128Mi"
