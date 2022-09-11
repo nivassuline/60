@@ -1,0 +1,1 @@
+docker build -t nivas1234/sending-service2 -t nivas1234/sending-service2:latest .
