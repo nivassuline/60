@@ -1,0 +1,1 @@
+docker build -t nivas1234/psycopg2server-web -t nivas1234/psycopg2server-web .
