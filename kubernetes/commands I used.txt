@@ -1,0 +1,6 @@
+minikube start
+kubectl create -f server-deployment.yaml
+kubectl create -f request-deployment.yaml
+kubectl apply -f flask-service.yml
+kubectl apply -f req-service.yml
+minikube tunnel
