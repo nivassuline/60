@@ -38,11 +38,10 @@ def url_info():
 
 
 @app.route("/test_status", methods=['post', 'get'])
-# Show status code and last updated for urls containing test in route
+# Show status code and last updated for urls containing test
 def test_status():
     cursor.execute(f'SELECT url FROM public."{TABLE_NAME}"')
     result = cursor.fetchall()
-    route_list = []
     final = []
     for i in range(len(result)):
         if "test" in str(result[i]):
