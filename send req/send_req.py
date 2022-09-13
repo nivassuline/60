@@ -9,7 +9,7 @@ starttime = time.time()
 def get_url_list():
     url_list = []
     r = requests.get('http://change.to.flask.service.cluster.ip:80/db_data')  # send request to view all data in database
-    #IP should be the minikube service Cluster IP
+    #IP should be the minikube Flask service Cluster IP
     for i in r.json():
         url_list.append(i[0])  # add the only the URL's to url_list
     return url_list
