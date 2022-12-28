@@ -4,12 +4,12 @@ services:
   web:
     build: .
     depends_on:
-      -  postgres
+      -  IMAGENAME
     ports:
-      - "80:80"
+      - "PORT1:PORT1"
   postgres:
-    image: postgres
+    image: IMAGENAME
     ports:
-      - "5432:5432"
+      - "PORT2:PORT2"
     environment:
-      POSTGRES_PASSWORD: nivos
+      POSTGRES_PASSWORD: PASS
