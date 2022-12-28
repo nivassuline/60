@@ -3,8 +3,8 @@ import psycopg2
 
 app = Flask(__name__)  # flask instance
 app.config["DEBUG"] = True  # debug code and where it went wrong
-con = psycopg2.connect(database="60-Project", user="postgres", password="nivos", host="10.0.0.10",
-                       port="5432")  # establish connection to database
+con = psycopg2.connect(database=DATABASE, user=USERNAME, password=PASSWORD, host=HOSTIP,
+                       port=DBPORT)  # establish connection to database
 TABLE_NAME = 'url_list'  # global variable to make changing table names easier
 cursor = con.cursor()
 
@@ -100,4 +100,4 @@ def update_status():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=80)
+    app.run(host=HOSTIP,port=HOSTPORT)
